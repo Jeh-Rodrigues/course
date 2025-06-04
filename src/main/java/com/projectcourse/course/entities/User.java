@@ -3,6 +3,9 @@ package com.projectcourse.course.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_user")
@@ -16,8 +19,10 @@ public class User implements Serializable {
     private String phone;
     private String password;
 
-    public User() {
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 
+    public User() {
     }
 
     public long getId() {
@@ -60,6 +65,10 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     public User(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
@@ -67,4 +76,16 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
